@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank Dashboard</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/feather-icons"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; }
+        .header-gradient { background: linear-gradient(to right, #1e3a8a, #2563eb); }
+        .nav-item:hover { background-color: #2563eb; }
+        .nav-item.active { background-color: #2563eb; border-bottom: 3px solid #ffffff; }
+    </style>
+
+    <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body class="antialiased">
+    <div class="min-h-screen bg-slate-100">
+        <header class="bg-white shadow-md sticky top-0 z-20">
+            <div class="container mx-auto px-4">
+                <div class="flex items-center justify-between h-20">
+                    <div class="flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-800 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
+                        <h1 class="text-2xl font-bold text-gray-800 tracking-tight">SecureBank</h1>
+                    </div>
+                    <div class="flex items-center space-x-6">
+                        <div class="text-right">
+                            <p class="font-semibold text-gray-700" th:text="${user.name}">Alex Green</p>
+                            <p class="text-xs text-gray-500">Last login: 01 Sep 2025, 11:50 PM</p>
+                        </div>
+                        <a th:href="@{/logout}" class="flex items-center text-sm text-gray-600 hover:text-blue-700">
+                            <i data-feather="log-out" class="w-4 h-4 mr-1"></i>
+                            <span>Logout</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <nav class="header-gradient text-white">
+                <div class="container mx-auto px-4">
+                    <div class="flex items-center">
+                        <a th:href="@{/dashboard}" class="nav-item active px-4 py-3 text-sm font-medium transition-colors">Accounts</a>
+                        <a th:href="@{/fund_transfer}" class="nav-item px-4 py-3 text-sm font-medium transition-colors">Fund Transfer</a>
+                        <a href="bill_pay.html" class="nav-item px-4 py-3 text-sm font-medium transition-colors">Bill Pay</a>
+                        <a href="cards.html" class="nav-item px-4 py-3 text-sm font-medium transition-colors">Cards</a>
+                        <a href="investments.html" class="nav-item px-4 py-3 text-sm font-medium transition-colors">Investments</a>
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <main class="container mx-auto p-4 md:p-6 main-content">
+            <aside class="sidebar">
+                <nav class="sidebar-nav">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a th:href="@{/dashboard}" class="active">Account Summary</a></li>
+                        <li><a href="#">View Statement</a></li>
+                        <li><a href="#">Open Fixed Deposit</a></li>
+                        <li><a href="#">Update Profile</a></li>
+                        <li><a href="#">Service Requests</a></li>
+                    </ul>
+                </nav>
+            </aside>
+
+            <section class="dashboard">
+                <h1 class="page-title">Dashboard</h1>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Account Summary</h2>
+                    </div>
+                    <div class="account-list">
+                        <div class="account-item" th:each="account : ${accounts}">
+                            <div class="account-item-header">
+                                <div class="account-type" th:text="${account.type}">Account Type</div>
+                            </div>
+                            <div class="account-details">
+                                <div class="account-number" th:text="${account.number}">A/c: **** **** 0000</div>
+                                <div class="account-balance">
+                                    <span class="currency" th:text="${account.currency}">₹</span>
+                                    <span th:text="${#numbers.formatDecimal(account.balance, 1, 'COMMA', 2, 'POINT')}">0.00</span>
+                                </div>
+                            </div>
+                            <div class="account-actions">
+                                <a href="#">View Statement</a>
+                                <a href="#">Transfer</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Transaction History</h2>
+                    </div>
+                    <div class="transaction-history">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Description</th>
+                                    <th>Amount</th>
+                                    <th>Type</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="txn, iterStat : ${transactions}" th:classappend="${iterStat.index >= 5} ? 'hidden txn-extra'">
+                                    <td th:text="${txn.date}">2024-09-01</td>
+                                    <td th:text="${txn.description}">ATM Withdrawal</td>
+                                    <td th:text="${txn.amount}">-2000</td>
+                                    <td th:text="${txn.type}">Debit</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="transaction-buttons">
+                            <button class="btn btn-primary" onclick="toggleTransactions()">See More</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Quick Actions</h2>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <div class="container">
+                &copy; 2024 MyBank. All Rights Reserved.
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        feather.replace();
+    </script>
+    
+    <script src="/js/dashboard.js"></script>
+
+</body>
+</html>
