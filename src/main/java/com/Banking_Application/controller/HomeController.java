@@ -10,6 +10,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class HomeController {
 
+    @GetMapping("/")
+    public String home() {
+        return "redirect:/login";
+}
+
     // this maps http://localhost:8080/login to login.html
     @GetMapping("/login")
     public String loginPage() {
