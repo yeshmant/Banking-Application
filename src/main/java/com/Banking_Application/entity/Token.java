@@ -1,13 +1,18 @@
 package com.Banking_Application.entity;
 
+import java.util.Date;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.Date;
 
 @Entity
 @NoArgsConstructor
@@ -33,11 +38,10 @@ public class Token {
     @JoinColumn(name = "account_id")
     private Account account;
 
-    public Token(Long id, String token, Date createdAt, Date expiryAt, Account account) {
-        this.id = id;
+    public Token(String token, Date expiryAt, Account account) {
         this.token = token;
-        this.createdAt = createdAt;
         this.expiryAt = expiryAt;
         this.account = account;
     }
+
 }
