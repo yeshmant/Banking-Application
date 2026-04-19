@@ -17,6 +17,7 @@ import lombok.val;
 @EnableCaching
 public class CacheConfig {
 
+    @SuppressWarnings("null")
     @Bean
     public CacheManager cacheManager() {
         val cacheManager = new CaffeineCacheManager();
