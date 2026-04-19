@@ -36,8 +36,9 @@ public class OtpServiceImpl implements OtpService {
 
     private LocalDateTime otpLimitReachedTime = null;
 
+    @SuppressWarnings("null")
     @Override
-    public String generateOTP(@NonNull String accountNumber) {
+    public String generateOTP(@SuppressWarnings("null") @NonNull String accountNumber) {
         if (!validationUtil.doesAccountExist(accountNumber)) {
             throw new AccountDoesNotExistException(ApiMessages.ACCOUNT_NOT_FOUND.getMessage());
         }
