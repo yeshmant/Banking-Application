@@ -96,6 +96,7 @@ public class TokenServiceImpl implements TokenService {
         val claims = getAllClaimsFromToken(token);
         return claimsResolver.apply(claims);
     }
+    @SuppressWarnings("unused")
     private JwtParser parser() {
         return Jwts.parserBuilder()
                 .setSigningKey(key())
